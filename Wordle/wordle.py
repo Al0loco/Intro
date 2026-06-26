@@ -58,14 +58,33 @@ def validarEntrada(intentoUsuario):
 
 # ─── Comparar intento con la palabra secreta ─────────────────────────────────
 def compararIntento(intentoUsuario, palabraSecreta):
-    resultado = []
+    resultado = ["gris"] * 5
+
+    # Primero marcar los verdes
     for i in range(5):
         if intentoUsuario[i] == palabraSecreta[i]:
-            resultado.append("verde")
-        elif intentoUsuario[i] in palabraSecreta:
-            resultado.append("amarillo")
-        else:
-            resultado.append("gris")
+            resultado[i] = "verde"
+
+    # Contar cuántas veces aparece cada letra en la secreta
+    # sin contar las que ya quedaron en verde
+    conteo = {}
+    for i in range(5):
+        if resultado[i] != "verde":  # solo contar las que no son verdes
+            letra = palabraSecreta[i]
+            if letra in conteo:
+                conteo[letra] += 1
+            else:
+                conteo[letra] = 1
+
+    # Luego marcar amarillos usando el conteo
+    for i in range(5):
+        if resultado[i] == "verde":
+            continue
+        letra = intentoUsuario[i]
+        if letra in conteo and conteo[letra] > 0:
+            resultado[i] = "amarillo"
+            conteo[letra] -= 1  # consumir una ocurrencia
+
     return resultado
 
 # ─── Cargar estadísticas desde JSON ──────────────────────────────────────────
@@ -289,6 +308,8 @@ class WordleApp:
     def ingresarLetra(self, letra):
         if self.juegoTerminado or self.letraActual >= 5:
             return
+        if letra == " ":  # bloquear espacios
+            return
         self.letrasIngresadas[self.intentoActual][self.letraActual] = letra.lower()
         self.celdas[self.intentoActual][self.letraActual].config(
             text=letra.upper(), bg="#DDD5C5", highlightbackground="#8C8C8C")
@@ -304,6 +325,9 @@ class WordleApp:
 
     def enviarIntento(self, evento):
         if self.juegoTerminado:
+            return
+        if self.letraActual < 5:  # no dejar enviar si no hay 5 letras
+            self.lblMensaje.config(text="Debes ingresar 5 letras.", fg="#E63946")
             return
         intento = "".join(self.letrasIngresadas[self.intentoActual])
         valido, msg = validarEntrada(intento)

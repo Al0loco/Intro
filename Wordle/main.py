@@ -32,30 +32,46 @@ def mostrarTablero(tablero):  # se agrega tablero como parámetro
 
 # Validar la palabra ingresada
 def validarEntrada(intentoUsuario):
-    # Verificar que tenga exactamente 5 letras
+    if " " in intentoUsuario:
+        print("La palabra no puede contener espacios.")
+        return False
     if len(intentoUsuario) != 5:
         print("La palabra debe tener exactamente 5 letras.")
         return False
-    
-    # Verificar que solo tenga letras del alfabeto
     for letra in intentoUsuario:
         if not letra.isalpha():
             print("La palabra solo puede contener letras.")
             return False
-    
     return True
 
 def compararIntento(intentoUsuario, palabraSecreta):
-    resultado = []  # lista que guardará el estado de cada letra
-    
+    resultado = ["gris"] * 5
+
+    # Primero marcar los verdes
     for i in range(5):
         if intentoUsuario[i] == palabraSecreta[i]:
-            resultado.append("verde")        # letra correcta en posición correcta
-        elif intentoUsuario[i] in palabraSecreta:
-            resultado.append("amarillo")     # letra existe pero en posición incorrecta
-        else:
-            resultado.append("gris")         # letra no existe en la palabra
-    
+            resultado[i] = "verde"
+
+    # Contar cuántas veces aparece cada letra en la secreta
+    # sin contar las que ya quedaron en verde
+    conteo = {}
+    for i in range(5):
+        if resultado[i] != "verde":  # solo contar las que no son verdes
+            letra = palabraSecreta[i]
+            if letra in conteo:
+                conteo[letra] += 1
+            else:
+                conteo[letra] = 1
+
+    # Luego marcar amarillos usando el conteo
+    for i in range(5):
+        if resultado[i] == "verde":
+            continue
+        letra = intentoUsuario[i]
+        if letra in conteo and conteo[letra] > 0:
+            resultado[i] = "amarillo"
+            conteo[letra] -= 1  # consumir una ocurrencia
+
     return resultado
 
 def colorearTableroTerminal(tablero, fila, intentoUsuario, resultado):  # version sin interfaz
@@ -97,7 +113,7 @@ def jugar():
     
     while intentos < maxIntentos and not juegoGanado: # mientras el numero de intentos sea menor a 6 y el juego no se haya ganado
         mostrarTablero(tablero)
-        intentoUsuario = input("Ingresa una palabra de 5 letras: ").lower()
+        intentoUsuario = input("Ingresa una palabra de 5 letras: ").replace(" ", "").lower()
         
         if not validarEntrada(intentoUsuario): # si la palabra ingresada no es valida, se le pide al usuario que ingrese otra palabra
             continue
