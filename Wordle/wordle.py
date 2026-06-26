@@ -467,9 +467,9 @@ class WordleApp:
         "¿Estás seguro de que querés salir del juego?",
         icon="question"
     )
-    if respuesta:
-        guardarEstadsJSON({"partidas_jugadas": 0, "partidas_ganadas": 0})
-        self.root.destroy()
+        if respuesta:
+            guardarEstadsJSON({"partidas_jugadas": 0, "partidas_ganadas": 0})
+            self.root.destroy()
 
 
 # Punto de entrada 
