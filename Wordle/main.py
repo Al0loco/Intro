@@ -48,4 +48,14 @@ def validarEntrada(intentoUsuario):
 
 
 def compararIntento(intentoUsuario, palabraSecreta):
+    resultado = []  # lista que guardará el estado de cada letra
     
+    for i in range(5):
+        if intentoUsuario[i] == palabraSecreta[i]:
+            resultado.append("verde")        # letra correcta en posición correcta
+        elif intentoUsuario[i] in palabraSecreta:
+            resultado.append("amarillo")     # letra existe pero en posición incorrecta
+        else:
+            resultado.append("gris")         # letra no existe en la palabra
+    
+    return resultado
