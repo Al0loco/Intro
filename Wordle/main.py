@@ -103,7 +103,7 @@ def jugar():
             continue
         
         resultado = compararIntento(intentoUsuario, palabraSecreta)
-        colorearTablero(tablero, intentos, intentoUsuario, resultado)  # se pasa intentoUsuario
+        colorearTableroTerminal(tablero, intentos, intentoUsuario, resultado)  # se pasa intentoUsuario
         
         if intentoUsuario == palabraSecreta:
             juegoGanado = True
