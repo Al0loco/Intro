@@ -9,7 +9,7 @@ terminal:
 	python3 main.py
  
 interfaz:
-	python3 wordle.py
+	python3.13 wordle.py
  
 clean:
 	rm -f estadisticas.json

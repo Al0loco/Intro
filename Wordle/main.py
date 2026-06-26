@@ -70,9 +70,9 @@ def colorearTableroTerminal(tablero, fila, intentoUsuario, resultado):  # versio
  
 def cargarEstadsJSON():
     try:
-        with open("estadisticas.json", "r") as archivo: #r es para leer el archivo
+        with open("estadisticas.json", "r") as archivo:
             estadisticas = json.load(archivo)
-    except FileNotFoundError:
+    except (FileNotFoundError, json.JSONDecodeError):
         estadisticas = {"partidas_jugadas": 0, "partidas_ganadas": 0}
     return estadisticas
 
