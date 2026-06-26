@@ -59,3 +59,65 @@ def compararIntento(intentoUsuario, palabraSecreta):
             resultado.append("gris")         # letra no existe en la palabra
     
     return resultado
+
+def colorearTablero(tablero, fila, resultado):
+    for i in range(5):
+        if resultado[i] == "verde":
+            tablero[fila][i] = f"\033[1;32m{tablero[fila][i]}\033[0m"  # Verde
+        elif resultado[i] == "amarillo":
+            tablero[fila][i] = f"\033[1;33m{tablero[fila][i]}\033[0m"  # Amarillo
+        else:
+            tablero[fila][i] = f"\033[1;37m{tablero[fila][i]}\033[0m"  # Gris
+
+def cargarEstadsJSON():
+    try:
+        with open("estadisticas.json", "r") as archivo: #r es para leer el archivo
+            estadisticas = json.load(archivo)
+    except FileNotFoundError:
+        estadisticas = {"partidas_jugadas": 0, "partidas_ganadas": 0}
+    return estadisticas
+
+def guardarEstadsJSON(estadisticas):
+    with open("estadisticas.json", "w") as archivo: #w es para escribir en el archivo
+        json.dump(estadisticas, archivo)
+
+def mostrarEstads(estadisticas):
+    print("\nEstadísticas del juego:")
+    print(f"Partidas jugadas: {estadisticas['partidas_jugadas']}")
+    print(f"Partidas ganadas: {estadisticas['partidas_ganadas']}")
+
+def jugar():
+    palabras = cargarPalabras()
+    palabraSecreta = elegirPalabra(palabras)
+    tablero = crearTablero()
+    estadisticas = cargarEstadsJSON()
+    
+    intentos = 0
+    maxIntentos = 6
+    juegoGanado = False
+    
+    while intentos < maxIntentos and not juegoGanado: # mientras el numero de intentos sea menor a 6 y el juego no se haya ganado
+        mostrarTablero(tablero)
+        intentoUsuario = input("Ingresa una palabra de 5 letras: ").lower()
+        
+        if not validarEntrada(intentoUsuario): # si la palabra ingresada no es valida, se le pide al usuario que ingrese otra palabra
+            continue
+        
+        resultado = compararIntento(intentoUsuario, palabraSecreta)
+        colorearTablero(tablero, intentos, resultado)
+        
+        if intentoUsuario == palabraSecreta:
+            juegoGanado = True
+            print("¡Felicidades! Has adivinado la palabra.")
+        
+        intentos += 1
+    
+    if not juegoGanado:
+        print(f"Lo siento, has agotado tus intentos. La palabra  del día era: {palabraSecreta}")
+    
+    estadisticas["partidas_jugadas"] += 1
+    if juegoGanado:
+        estadisticas["partidas_ganadas"] += 1
+    
+    guardarEstadsJSON(estadisticas)
+    mostrarEstads(estadisticas)
