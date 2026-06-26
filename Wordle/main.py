@@ -1,5 +1,6 @@
 import json
 import random
+# para compilar en terminal: python3 main.py
 
 # Cargar palabras desde un archivo de texto
 def cargarPalabras():
@@ -11,7 +12,7 @@ def cargarPalabras():
 def elegirPalabra(palabras):
     return random.choice(palabras)
 
-#Crear matriz vacia de 6 filas y 5 columnas
+# Crear matriz vacia de 6 filas y 5 columnas
 def crearTablero():
     tablero = []           # lista principal vacía
     
@@ -23,13 +24,11 @@ def crearTablero():
     
     return tablero
 
-
-# mostrar matriz vacia que va a ser el tablero del juego 
-def mostrarTablero():
-    print("WORDLE")
+# mostrar matriz vacia que va a ser el tablero del juego
+def mostrarTablero(tablero):  # se agrega tablero como parámetro
+    print("\nWORDLE")
     for i in tablero:
         print(i)
-
 
 # Validar la palabra ingresada
 def validarEntrada(intentoUsuario):
@@ -46,7 +45,6 @@ def validarEntrada(intentoUsuario):
     
     return True
 
-
 def compararIntento(intentoUsuario, palabraSecreta):
     resultado = []  # lista que guardará el estado de cada letra
     
@@ -60,15 +58,16 @@ def compararIntento(intentoUsuario, palabraSecreta):
     
     return resultado
 
-def colorearTablero(tablero, fila, resultado):
+def colorearTableroTerminal(tablero, fila, intentoUsuario, resultado):  # version sin interfaz
     for i in range(5):
+        letra = intentoUsuario[i].upper()  # se pone la letra ingresada en el tablero
         if resultado[i] == "verde":
-            tablero[fila][i] = f"\033[1;32m{tablero[fila][i]}\033[0m"  # Verde
+            tablero[fila][i] = f"{letra}V"  # letra correcta en posición correcta
         elif resultado[i] == "amarillo":
-            tablero[fila][i] = f"\033[1;33m{tablero[fila][i]}\033[0m"  # Amarillo
+            tablero[fila][i] = f"{letra}A"  # letra existe pero en posición incorrecta
         else:
-            tablero[fila][i] = f"\033[1;37m{tablero[fila][i]}\033[0m"  # Gris
-
+            tablero[fila][i] = f"{letra}G"  # letra no existe en la palabra
+ 
 def cargarEstadsJSON():
     try:
         with open("estadisticas.json", "r") as archivo: #r es para leer el archivo
@@ -104,16 +103,17 @@ def jugar():
             continue
         
         resultado = compararIntento(intentoUsuario, palabraSecreta)
-        colorearTablero(tablero, intentos, resultado)
+        colorearTablero(tablero, intentos, intentoUsuario, resultado)  # se pasa intentoUsuario
         
         if intentoUsuario == palabraSecreta:
             juegoGanado = True
+            mostrarTablero(tablero)
             print("¡Felicidades! Has adivinado la palabra.")
         
         intentos += 1
     
     if not juegoGanado:
-        print(f"Lo siento, has agotado tus intentos. La palabra  del día era: {palabraSecreta}")
+        print(f"Lo siento, has agotado tus intentos. La palabra del día era: {palabraSecreta}")
     
     estadisticas["partidas_jugadas"] += 1
     if juegoGanado:
@@ -121,3 +121,5 @@ def jugar():
     
     guardarEstadsJSON(estadisticas)
     mostrarEstads(estadisticas)
+
+jugar()
