@@ -138,4 +138,7 @@ def jugar():
     guardarEstadsJSON(estadisticas)
     mostrarEstads(estadisticas)
 
+    # resetear estadísticas al salir
+    guardarEstadsJSON({"partidas_jugadas": 0, "partidas_ganadas": 0})
+
 jugar()

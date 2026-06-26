@@ -463,12 +463,13 @@ class WordleApp:
     # ════════════════════════════════════════════════════════════════════════════
     def confirmarSalir(self):
         respuesta = messagebox.askyesno(
-            "Salir",
-            "¿Estás seguro de que querés salir del juego?",
-            icon="question"
-        )
-        if respuesta:
-            self.root.destroy()
+        "Salir",
+        "¿Estás seguro de que querés salir del juego?",
+        icon="question"
+    )
+    if respuesta:
+        guardarEstadsJSON({"partidas_jugadas": 0, "partidas_ganadas": 0})
+        self.root.destroy()
 
 
 # Punto de entrada 
