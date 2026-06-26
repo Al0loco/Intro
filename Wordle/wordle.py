@@ -5,6 +5,9 @@ import tkinter as tk
 from tkinter import messagebox
 import threading
 import time
+from colorama import Fore, Style, init
+
+init(autoreset=True)
 
 # ─── Colores y fuentes ────────────────────────────────────────────────────────
 COLOR_FONDO        = "#F5F0E8"   # crema
