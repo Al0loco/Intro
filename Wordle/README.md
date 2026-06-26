@@ -23,33 +23,7 @@ Juego de Wordle implementado en Python, disponible en versión terminal y versi�
 
 ## Cómo correr el programa
 
-### Opción 1 — Con Makefile (más fácil)
-
-Primero entrá a la carpeta del proyecto:
-```bash
-cd Wordle
-```
-
-Versión terminal:
-```bash
-make terminal
-```
-
-Versión con interfaz gráfica:
-```bash
-make interfaz
-```
-
-Limpiar archivos generados:
-```bash
-make clean
-```
-
----
-
-### Opción 2 — Sin Makefile
-
-Primero entrá a la carpeta del proyecto:
+Primero entrar a la carpeta del proyecto:
 ```bash
 cd Wordle
 ```
@@ -67,7 +41,7 @@ python3 wordle.py
 ---
 
 ## Cómo se juega
-- Tenés **6 intentos** para adivinar una palabra de **5 letras**
+- Tienes **6 intentos** para adivinar una palabra de **5 letras**
 - Después de cada intento se indica:
   - **V** / 🟩 Verde → letra correcta en posición correcta
   - **A** / 🟨 Amarillo → letra existe pero en posición incorrecta
